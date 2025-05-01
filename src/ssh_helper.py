@@ -4,6 +4,7 @@ from datetime import datetime
 import re
 import json
 from src.database import Settings
+from paramiko.ssh_exception import AuthenticationException
 
 class SSHClient:
     def __init__(self, hostname, username='timekpr-remote', password=None, port=22):
@@ -38,6 +39,13 @@ class SSHClient:
             output = stdout.read().decode('utf-8')
             error = stderr.read().decode('utf-8')
             
+            if exit_status == 127:
+                return False, f"timekpra not installed on {self.hostname}?", None
+                
+            # A german error message - but exit code is zero
+            if f'Zugriff verweigert' in output or f'Zugriff verweigert' in error:
+                return False, f"Insufficient privileges", None
+            
             # Check for the error message indicating user not found
             if f'User "{username}" configuration is not found' in output or f'User "{username}" configuration is not found' in error:
                 return False, f"User '{username}' not found on system", None
@@ -47,7 +55,8 @@ class SSHClient:
             
             # If we get here, the user likely exists
             return True, output, config_dict
-            
+        except AuthenticationException as e:
+           return False, f"Wrong credentials for user '{self.username}' on host '{self.hostname}'. ", None            
         except Exception as e:
             return False, f"Connection error: {str(e)}", None
         finally:

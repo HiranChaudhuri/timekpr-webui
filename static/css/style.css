@@ -170,6 +170,7 @@ label {
 
 .dashboard-header {
     display: flex;
+	flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
@@ -540,6 +541,7 @@ label {
 
 .time-controls {
     display: flex;
+	flex-wrap: wrap;
     justify-content: center;
     gap: 15px;
     margin: 20px 0;

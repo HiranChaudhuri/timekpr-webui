@@ -4,32 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TimeKpr webUI Dashboard</title>
+	<link rel="icon" type="image/png" href="{{ url_for('static', filename='timekpr-client-128.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 </head>
 <body class="dashboard-body">
     <div class="dashboard-container">
-        <header class="dashboard-header">
+		<header class="dashboard-header">
+			<div>
+				<img src="{{ url_for('static', filename='timekpr-client-128.png') }}"/>
+			</div>
+			
             <h1>TimeKpr webUI Dashboard</h1>
-            <div class="user-controls">
-                <div class="task-status-container">
-                    <span class="task-status">
-                        Background Tasks: <span id="task-status-indicator" class="status-unknown">Unknown</span>
-                    </span>
-                    <a href="{{ url_for('restart_tasks') }}" class="btn btn-sm btn-restart" title="Restart Background Tasks">
-                        <span class="restart-icon">↻</span>
-                    </a>
-                </div>
-                <a href="{{ url_for('admin') }}" class="btn btn-sm btn-admin">Admin</a>
-                <a href="{{ url_for('settings') }}" class="btn btn-sm btn-settings">Settings</a>
-                <a href="{{ url_for('logout') }}" class="btn btn-sm btn-logout">Logout</a>
-            </div>
-        </header>
-        
+
+			<div class="user-controls">
+			    <div class="task-status-container">
+			        <span class="task-status">
+			            Background Tasks: <span id="task-status-indicator" class="status-unknown">Unknown</span>
+			        </span>
+			        <a href="{{ url_for('restart_tasks') }}" class="btn btn-sm btn-restart" title="Restart Background Tasks">
+			            <span class="restart-icon">↻</span>
+			        </a>
+			    </div>
+			    <a href="{{ url_for('admin') }}" class="btn btn-sm btn-admin">Admin</a>
+			    <a href="{{ url_for('settings') }}" class="btn btn-sm btn-settings">Settings</a>
+			    <a href="{{ url_for('logout') }}" class="btn btn-sm btn-logout">Logout</a>
+			</div>
+		</header>
+
+		        
         <script>
             // Function to update the task status indicator
             function updateTaskStatus() {
-                fetch('/api/task-status')
+                fetch('{{ url_for('get_task_status') }}')
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
@@ -187,8 +194,10 @@
                 <p>Current adjustment: <span id="timeAdjustment">0</span> minutes</p>
                 
                 <div class="time-controls">
-                    <button class="btn btn-time-adjust" onclick="adjustTime(-15)">-15m</button>
+					<button class="btn btn-time-adjust" onclick="adjustTime(-15)">-15m</button>
+					<button class="btn btn-time-adjust" onclick="adjustTime(-10)">-10m</button>
                     <button class="btn btn-time-adjust btn-reset" onclick="resetTime()">Reset</button>
+					<button class="btn btn-time-adjust" onclick="adjustTime(10)">+10m</button>
                     <button class="btn btn-time-adjust" onclick="adjustTime(15)">+15m</button>
                 </div>
                 

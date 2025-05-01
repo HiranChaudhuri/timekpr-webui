@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TimeKpr webUI Settings</title>
+	<link rel="icon" type="image/png" href="{{ url_for('static', filename='timekpr-client-128.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body class="dashboard-body">
@@ -28,7 +29,7 @@
         <script>
             // Function to update the task status indicator
             function updateTaskStatus() {
-                fetch('/api/task-status')
+                fetch('{{ url_for('get_task_status') }}')
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
@@ -73,12 +74,27 @@
         {% endwith %}
         
         <div class="dashboard-main">
+			<div class="card">
+				<div class="card-header">
+				    <h2>Current Settings</h2>
+				</div>
+				<div class="card-body">
+				    <table width="100%" order="0">
+    				    {% for key, value in conf.items() %}
+							<tr>
+							    <td width="50%">{{key}}</td>
+							    <td width="50%">{{value}}</td>
+							</tr>
+       				    {% endfor %}
+				    </table>
+    			</div>
+			</div>
             <div class="card">
                 <div class="card-header">
                     <h2>Change Password</h2>
                 </div>
                 <div class="card-body">
-                    <p class="settings-info">This password is used for both admin login and SSH connections.</p>
+                    <p class="settings-info">This password is used for webUI login only.</p>
                     <form action="{{ url_for('settings') }}" method="POST">
                         <div class="form-group">
                             <label for="current_password">Current Password</label>
