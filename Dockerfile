@@ -1,10 +1,10 @@
-FROM python:3.9-slim
+FROM python:slim
 
 WORKDIR /app
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    openssh-client \
+    openssh-client curl\
     && rm -rf /var/lib/apt/lists/*
 
 # Create data directory with proper permissions
